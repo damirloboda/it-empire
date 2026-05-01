@@ -340,7 +340,7 @@ body::after{
 
   <!-- CRAFT TAB -->
   <div class="page" id="page-craft">
-    <div class="craft-intro">⚙️ <b>Crafting Lab</b> — Combine resources to craft powerful items.<br>🔧 Components: every 10 clicks &nbsp; 💡 Chips: every 100 clicks<br>⚛️ Cores: passive income milestone &nbsp; 📐 Blueprints: rare drops</div>
+    <div class="craft-intro">⚙️ <b>Crafting Lab</b> — Combine resources to craft powerful items.<br>🔧 Component: every 10 clicks &nbsp; 💡 Chip: every 100 clicks &nbsp; ⚛️ Core: every 1000 clicks<br>📐 Blueprint: rare drop at high passive income &nbsp; 🔮 Quantum: ultra-rare, craft only<br>⚠️ <b>Conversion recipes are LOSSY</b> — converting resources is always inefficient on purpose!</div>
     <div class="section-title">MATERIALS INVENTORY</div>
     <div class="inventory-bar" id="inventory-display"></div>
     <div class="craft-filter">
@@ -490,47 +490,65 @@ const SPECIAL=[
 ];
 
 const RECIPES=[
-  // CLICK BOOSTERS
-  {id:'r0',cat:'click',name:'Overclocking Kit',icon:'⚡',mats:{component:5},effect:()=>applyBoost('clickX2',60),effectLabel:'+100% click power (60s)'},
-  {id:'r1',cat:'click',name:'Turbo Compiler',icon:'🔥',mats:{component:10,chip:1},effect:()=>applyBoost('clickX3',30),effectLabel:'+200% click power (30s)'},
-  {id:'r2',cat:'click',name:'Quantum Processor',icon:'🔬',mats:{component:15,chip:3,blueprint:1},effect:()=>{G.crafted.quantumBonus=(G.crafted.quantumBonus||0)+50;},effectLabel:'+50 base click power (permanent)'},
-  {id:'r3',cat:'click',name:'Neural Click Engine',icon:'🧠',mats:{component:25,chip:5,core:1},effect:()=>{G.crafted.quantumBonus=(G.crafted.quantumBonus||0)+200;},effectLabel:'+200 base click power (permanent)'},
-  {id:'r4',cat:'click',name:'Hyper Click Module',icon:'💥',mats:{component:40,chip:10,core:2,blueprint:2},effect:()=>{G.crafted.quantumBonus=(G.crafted.quantumBonus||0)+1000;},effectLabel:'+1000 base click power (permanent)'},
-  {id:'r5',cat:'click',name:'God Mode Chip',icon:'👑',mats:{component:100,chip:25,core:5,blueprint:5,quantum:1},effect:()=>{G.crafted.quantumBonus=(G.crafted.quantumBonus||0)+5000;},effectLabel:'+5000 base click power (permanent)'},
+  // CLICK BOOSTERS — permanent bonuses должны быть дорогими
+  {id:'r0',cat:'click',name:'Overclocking Kit',icon:'⚡',mats:{component:20},effect:()=>applyBoost('clickX2',60),effectLabel:'+100% click power (60s temp boost)'},
+  {id:'r1',cat:'click',name:'Turbo Compiler',icon:'🔥',mats:{component:40,chip:3},effect:()=>applyBoost('clickX3',30),effectLabel:'+200% click power (30s temp boost)'},
+  {id:'r2',cat:'click',name:'Quantum Processor',icon:'🔬',mats:{component:60,chip:10,blueprint:2},effect:()=>{G.crafted.quantumBonus=(G.crafted.quantumBonus||0)+50;},effectLabel:'+50 base click power (permanent)'},
+  {id:'r3',cat:'click',name:'Neural Click Engine',icon:'🧠',mats:{component:120,chip:20,core:3},effect:()=>{G.crafted.quantumBonus=(G.crafted.quantumBonus||0)+200;},effectLabel:'+200 base click power (permanent)'},
+  {id:'r4',cat:'click',name:'Hyper Click Module',icon:'💥',mats:{component:250,chip:50,core:8,blueprint:4},effect:()=>{G.crafted.quantumBonus=(G.crafted.quantumBonus||0)+1000;},effectLabel:'+1000 base click power (permanent)'},
+  {id:'r5',cat:'click',name:'God Mode Chip',icon:'👑',mats:{component:600,chip:120,core:25,blueprint:12,quantum:2},effect:()=>{G.crafted.quantumBonus=(G.crafted.quantumBonus||0)+5000;},effectLabel:'+5000 base click power (permanent)'},
 
-  // PASSIVE INCOME
-  {id:'r6',cat:'passive',name:'Auto-Clicker Script',icon:'🖱️',mats:{component:10,chip:2},effect:()=>{G.crafted.autoClick=(G.crafted.autoClick||0)+1;},effectLabel:'+5 passive $/sec (permanent)'},
-  {id:'r7',cat:'passive',name:'AI Core Module',icon:'🧩',mats:{component:20,chip:5,core:1},effect:()=>{G.crafted.aiCoreLevel=(G.crafted.aiCoreLevel||0)+1;},effectLabel:'AI team ×2 output (stackable)'},
-  {id:'r8',cat:'passive',name:'DataCenter Blueprint',icon:'📐',mats:{component:30,chip:10,core:2,blueprint:2},effect:()=>{G.crafted.datacenterLevel=(G.crafted.datacenterLevel||0)+1;},effectLabel:'×1.5 all passive income (stackable)'},
-  {id:'r9',cat:'passive',name:'Neural Network Chip',icon:'🧬',mats:{component:25,chip:8,core:3,blueprint:1},effect:()=>{G.crafted.neuralNet=(G.crafted.neuralNet||0)+1;},effectLabel:'Auto-generate 1 chip every 30s'},
-  {id:'r10',cat:'passive',name:'Passive Multiplier v2',icon:'📈',mats:{component:50,chip:15,core:3,blueprint:3},effect:()=>{G.crafted.datacenterLevel=(G.crafted.datacenterLevel||0)+2;},effectLabel:'×1.5 passive income ×2 stack (permanent)'},
-  {id:'r11',cat:'passive',name:'Quantum Income Engine',icon:'⚛️',mats:{component:80,chip:20,core:5,blueprint:4,quantum:1},effect:()=>{G.crafted.datacenterLevel=(G.crafted.datacenterLevel||0)+3;},effectLabel:'Massive passive multiplier boost'},
+  // PASSIVE INCOME — постоянные множители должны стоить дорого
+  {id:'r6',cat:'passive',name:'Auto-Clicker Script',icon:'🖱️',mats:{component:40,chip:8},effect:()=>{G.crafted.autoClick=(G.crafted.autoClick||0)+1;},effectLabel:'+5 passive $/sec (permanent)'},
+  {id:'r7',cat:'passive',name:'AI Core Module',icon:'🧩',mats:{component:80,chip:20,core:4},effect:()=>{G.crafted.aiCoreLevel=(G.crafted.aiCoreLevel||0)+1;},effectLabel:'AI team ×2 output (stackable)'},
+  {id:'r8',cat:'passive',name:'DataCenter Blueprint',icon:'📐',mats:{component:150,chip:40,core:8,blueprint:5},effect:()=>{G.crafted.datacenterLevel=(G.crafted.datacenterLevel||0)+1;},effectLabel:'×1.5 all passive income (stackable, expensive!)'},
+  {id:'r9',cat:'passive',name:'Neural Network Chip',icon:'🧬',mats:{component:100,chip:30,core:10,blueprint:3},effect:()=>{G.crafted.neuralNet=(G.crafted.neuralNet||0)+1;},effectLabel:'Auto-generate 1 chip every 30s'},
+  {id:'r10',cat:'passive',name:'Passive Multiplier v2',icon:'📈',mats:{component:300,chip:80,core:15,blueprint:8},effect:()=>{G.crafted.datacenterLevel=(G.crafted.datacenterLevel||0)+2;},effectLabel:'×1.5 passive income ×2 stack (permanent)'},
+  {id:'r11',cat:'passive',name:'Quantum Income Engine',icon:'⚛️',mats:{component:500,chip:150,core:30,blueprint:15,quantum:2},effect:()=>{G.crafted.datacenterLevel=(G.crafted.datacenterLevel||0)+3;},effectLabel:'Massive passive multiplier boost (late game)'},
 
-  // SPECIAL ONE-TIMERS
-  {id:'r12',cat:'special',name:'Startup Incubator',icon:'🚀',mats:{component:40,chip:12,core:2,blueprint:3},effect:()=>{G.crafted.incubator=(G.crafted.incubator||0)+1;},effectLabel:'-20% hire cost (stackable)'},
-  {id:'r13',cat:'special',name:'IPO Launch Package',icon:'💰',mats:{component:50,chip:20,core:5,blueprint:5},effect:()=>{const b=Math.max(getPassivePerSec()*10,1000);G.money+=b;G.allTime+=b;showNotif(`💰 IPO earned ${fmt(b)}!`,'gold-notif');},effectLabel:'One-time: earn 10× your passive income'},
-  {id:'r14',cat:'special',name:'Venture Capital Round',icon:'🏦',mats:{component:60,chip:25,core:5,blueprint:5},effect:()=>{const b=G.allTime*0.1;G.money+=b;G.allTime+=b;showNotif(`🏦 VC funded ${fmt(b)}!`,'gold-notif');},effectLabel:'One-time: earn 10% of all-time earnings'},
-  {id:'r15',cat:'special',name:'Component Forge',icon:'🔨',mats:{chip:5,core:1},effect:()=>{G.mats.component+=50;showNotif('🔧 +50 Components!','green-notif');},effectLabel:'Convert chips → 50 components'},
-  {id:'r16',cat:'special',name:'Chip Fabricator',icon:'💡',mats:{component:30,core:2},effect:()=>{G.mats.chip+=10;showNotif('💡 +10 Chips!','green-notif');},effectLabel:'Convert components → 10 chips'},
-  {id:'r17',cat:'special',name:'Core Reactor',icon:'⚛️',mats:{component:100,chip:20},effect:()=>{G.mats.core+=3;showNotif('⚛️ +3 Cores!','green-notif');},effectLabel:'Craft 3 core modules'},
-  {id:'r18',cat:'special',name:'Blueprint Printer',icon:'📐',mats:{component:80,chip:15,core:2},effect:()=>{G.mats.blueprint+=2;showNotif('📐 +2 Blueprints!','gold-notif');},effectLabel:'Print 2 blueprints'},
-  {id:'r19',cat:'special',name:'Quantum Synthesizer',icon:'🔮',mats:{component:200,chip:50,core:10,blueprint:5},effect:()=>{G.mats.quantum+=1;showNotif('🔮 Quantum Fragment crafted!','gold-notif');},effectLabel:'Synthesize a rare Quantum Fragment'},
+  // SPECIAL ONE-TIMERS — финансовые рецепты оставляем, но повышаем стоимость
+  {id:'r12',cat:'special',name:'Startup Incubator',icon:'🚀',mats:{component:150,chip:40,core:8,blueprint:5},effect:()=>{G.crafted.incubator=(G.crafted.incubator||0)+1;},effectLabel:'-20% hire cost (stackable)'},
+  {id:'r13',cat:'special',name:'IPO Launch Package',icon:'💰',mats:{component:200,chip:60,core:15,blueprint:8},effect:()=>{const b=Math.max(getPassivePerSec()*10,5000);G.money+=b;G.allTime+=b;showNotif(`💰 IPO earned ${fmt(b)}!`,'gold-notif');},effectLabel:'One-time: earn 10× your passive income'},
+  {id:'r14',cat:'special',name:'Venture Capital Round',icon:'🏦',mats:{component:300,chip:100,core:20,blueprint:10},effect:()=>{const b=G.allTime*0.1;G.money+=b;G.allTime+=b;showNotif(`🏦 VC funded ${fmt(b)}!`,'gold-notif');},effectLabel:'One-time: earn 10% of all-time earnings'},
+  // ── КОНВЕРСИОННЫЕ РЕЦЕПТЫ (LOSSY — всегда теряешь ценность при конвертации) ──
+  // Иерархия ресурсов: 10 comp = 1 chip (по кликам); 10 chip = 1 core (по кликам: 100 chip = 1000 clicks = 100 cores? нет)
+  // Реальное соотношение по кликам: 1 component = 10 clicks, 1 chip = 100 clicks, 1 core = 1000 clicks
+  // Значит: 1 core ≈ 10 chips ≈ 100 components по "click-value"
+  // При конвертации вниз (chip→comp): получаешь МЕНЬШЕ чем потратил по ценности → lossy
+  // При конвертации вверх (comp→chip→core): тоже lossy, нужно больше чем "честный" обмен
 
-  // TEAM BOOSTERS
-  {id:'r20',cat:'passive',name:'Dev Bootcamp',icon:'🎓',mats:{component:20,chip:5},effect:()=>{G.crafted.devBoost=(G.crafted.devBoost||0)+1;},effectLabel:'Junior/Senior devs +50% output (stackable)'},
-  {id:'r21',cat:'passive',name:'AI Upgrade Patch',icon:'🤖',mats:{component:35,chip:10,core:2},effect:()=>{G.crafted.aiCoreLevel=(G.crafted.aiCoreLevel||0)+2;},effectLabel:'AI Agents ×4 total output boost'},
-  {id:'r22',cat:'passive',name:'CTO Strategy Plan',icon:'📋',mats:{component:50,chip:15,core:3,blueprint:2},effect:()=>{G.crafted.ctoBoost=(G.crafted.ctoBoost||0)+1;},effectLabel:'CTO output ×2 (stackable)'},
+  // Component Forge: 10 chip → 50 comp (честно было бы 100, дают 50 = теряешь 50%)
+  {id:'r15',cat:'special',name:'Component Forge',icon:'🔨',mats:{chip:10,core:2},effect:()=>{G.mats.component+=60;showNotif('🔧 +60 Components crafted!','green-notif');},effectLabel:'10 chips + 2 cores → 60 components (lossy)'},
+
+  // Chip Fabricator: 80 comp + 3 core → 5 chip (честно было бы 8 chip за 80 comp, дают 5 = lossy)
+  {id:'r16',cat:'special',name:'Chip Fabricator',icon:'💡',mats:{component:80,core:3},effect:()=>{G.mats.chip+=5;showNotif('💡 +5 Chips fabricated!','green-notif');},effectLabel:'80 components + 3 cores → 5 chips (lossy)'},
+
+  // Core Reactor: comp→chip→core цикл ПОЛНОСТЬЮ убран. Теперь это честный крафт:
+  // 200 comp + 50 chip → 2 core (честно было бы ~3-4 core, дают 2 = lossy 50%)
+  {id:'r17',cat:'special',name:'Core Reactor',icon:'⚛️',mats:{component:200,chip:50},effect:()=>{G.mats.core+=2;showNotif('⚛️ +2 Core modules!','gold-notif');},effectLabel:'200 components + 50 chips → 2 cores (lossy)'},
+
+  // Blueprint Printer: нельзя использовать для получения blueprints-profit. Высокие затраты.
+  // 150 comp + 30 chip + 5 core → 1 blueprint (раньше было 80+15+2 → 2 blueprints = слишком дёшево)
+  {id:'r18',cat:'special',name:'Blueprint Printer',icon:'📐',mats:{component:150,chip:30,core:5},effect:()=>{G.mats.blueprint+=1;showNotif('📐 +1 Blueprint printed!','gold-notif');},effectLabel:'150 comp + 30 chip + 5 core → 1 blueprint'},
+
+  // Quantum Synthesizer: очень дорого, quantum нельзя конвертировать обратно
+  {id:'r19',cat:'special',name:'Quantum Synthesizer',icon:'🔮',mats:{component:500,chip:150,core:30,blueprint:8},effect:()=>{G.mats.quantum+=1;showNotif('🔮 Quantum Fragment synthesized!','gold-notif');},effectLabel:'500 comp + 150 chip + 30 core + 8 blueprint → 1 quantum'},
+
+  // TEAM BOOSTERS — стоят реально дорого
+  {id:'r20',cat:'passive',name:'Dev Bootcamp',icon:'🎓',mats:{component:80,chip:20},effect:()=>{G.crafted.devBoost=(G.crafted.devBoost||0)+1;},effectLabel:'Junior/Senior devs +50% output (stackable)'},
+  {id:'r21',cat:'passive',name:'AI Upgrade Patch',icon:'🤖',mats:{component:150,chip:40,core:8},effect:()=>{G.crafted.aiCoreLevel=(G.crafted.aiCoreLevel||0)+2;},effectLabel:'AI Agents ×4 total output boost'},
+  {id:'r22',cat:'passive',name:'CTO Strategy Plan',icon:'📋',mats:{component:200,chip:60,core:12,blueprint:6},effect:()=>{G.crafted.ctoBoost=(G.crafted.ctoBoost||0)+1;},effectLabel:'CTO output ×2 (stackable)'},
 
   // CLICK + PASSIVE HYBRID
-  {id:'r23',cat:'click',name:'Full Stack Turbo',icon:'🌐',mats:{component:30,chip:8,core:1},effect:()=>{G.crafted.quantumBonus=(G.crafted.quantumBonus||0)+100;G.crafted.autoClick=(G.crafted.autoClick||0)+1;},effectLabel:'+100 click power & +5 passive/sec'},
-  {id:'r24',cat:'special',name:'Platform Launch',icon:'🚀',mats:{component:75,chip:20,core:5,blueprint:3},effect:()=>{G.crafted.quantumBonus=(G.crafted.quantumBonus||0)+500;G.crafted.datacenterLevel=(G.crafted.datacenterLevel||0)+1;},effectLabel:'+500 click & ×1.5 passive (ultimate combo)'},
+  {id:'r23',cat:'click',name:'Full Stack Turbo',icon:'🌐',mats:{component:120,chip:30,core:5},effect:()=>{G.crafted.quantumBonus=(G.crafted.quantumBonus||0)+100;G.crafted.autoClick=(G.crafted.autoClick||0)+1;},effectLabel:'+100 click power & +5 passive/sec'},
+  {id:'r24',cat:'special',name:'Platform Launch',icon:'🚀',mats:{component:350,chip:80,core:20,blueprint:10},effect:()=>{G.crafted.quantumBonus=(G.crafted.quantumBonus||0)+500;G.crafted.datacenterLevel=(G.crafted.datacenterLevel||0)+1;},effectLabel:'+500 click & ×1.5 passive (ultimate combo)'},
 
-  // LATE GAME
-  {id:'r25',cat:'special',name:'Unicorn Status',icon:'🦄',mats:{component:200,chip:80,core:20,blueprint:10,quantum:2},effect:()=>{G.crafted.quantumBonus=(G.crafted.quantumBonus||0)+10000;G.crafted.datacenterLevel=(G.crafted.datacenterLevel||0)+5;},effectLabel:'Unicorn company boost — massive everything'},
-  {id:'r26',cat:'special',name:'Market IPO',icon:'📊',mats:{component:150,chip:60,core:15,blueprint:8,quantum:1},effect:()=>{const b=G.allTime*0.25;G.money+=b;G.allTime+=b;showNotif(`📊 IPO: earned ${fmt(b)}!`,'gold-notif');},effectLabel:'Earn 25% of your all-time revenue'},
-  {id:'r27',cat:'click',name:'Legendary Keyboard',icon:'⌨️',mats:{component:60,chip:20,core:5},effect:()=>{G.crafted.quantumBonus=(G.crafted.quantumBonus||0)+2000;},effectLabel:'+2000 click power permanently'},
-  {id:'r28',cat:'passive',name:'Infinite Loop Engine',icon:'🔄',mats:{component:120,chip:40,core:8,blueprint:6},effect:()=>{G.crafted.autoClick=(G.crafted.autoClick||0)+10;G.crafted.datacenterLevel=(G.crafted.datacenterLevel||0)+2;},effectLabel:'+50 passive/sec & ×1.5 multiplier'},
-  {id:'r29',cat:'special',name:'Empire Headquarters',icon:'🏢',mats:{component:300,chip:100,core:25,blueprint:15,quantum:3},effect:()=>{G.prestigeMulti*=1.5;showNotif('🏢 Prestige multiplier boosted!','gold-notif');},effectLabel:'Instantly boost prestige multiplier ×1.5'},
+  // LATE GAME — очень дорого, для эндгейма
+  {id:'r25',cat:'special',name:'Unicorn Status',icon:'🦄',mats:{component:800,chip:250,core:60,blueprint:25,quantum:3},effect:()=>{G.crafted.quantumBonus=(G.crafted.quantumBonus||0)+10000;G.crafted.datacenterLevel=(G.crafted.datacenterLevel||0)+5;},effectLabel:'Unicorn company boost — massive everything'},
+  {id:'r26',cat:'special',name:'Market IPO',icon:'📊',mats:{component:600,chip:200,core:50,blueprint:20,quantum:2},effect:()=>{const b=G.allTime*0.25;G.money+=b;G.allTime+=b;showNotif(`📊 IPO: earned ${fmt(b)}!`,'gold-notif');},effectLabel:'Earn 25% of your all-time revenue'},
+  {id:'r27',cat:'click',name:'Legendary Keyboard',icon:'⌨️',mats:{component:250,chip:80,core:20},effect:()=>{G.crafted.quantumBonus=(G.crafted.quantumBonus||0)+2000;},effectLabel:'+2000 click power permanently'},
+  {id:'r28',cat:'passive',name:'Infinite Loop Engine',icon:'🔄',mats:{component:500,chip:150,core:35,blueprint:20},effect:()=>{G.crafted.autoClick=(G.crafted.autoClick||0)+10;G.crafted.datacenterLevel=(G.crafted.datacenterLevel||0)+2;},effectLabel:'+50 passive/sec & ×1.5 multiplier'},
+  {id:'r29',cat:'special',name:'Empire Headquarters',icon:'🏢',mats:{component:1000,chip:350,core:80,blueprint:40,quantum:5},effect:()=>{G.prestigeMulti*=1.5;showNotif('🏢 Prestige multiplier boosted!','gold-notif');},effectLabel:'Instantly boost prestige multiplier ×1.5'},
 ];
 
 const MILESTONES=[
